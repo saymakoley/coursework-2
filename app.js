@@ -2,6 +2,7 @@ const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const { ObjectId } = require("mongodb");
 const parser = require("body-parser");
+const bodyParser = require("body-parser");
 
 const app = express();
 
@@ -21,6 +22,9 @@ const connectToDB = async function () {
 const getDB = function () {
   return mongoDB.db("sayma-coursework");
 };
+
+// body parser
+app.use(bodyParser.json())
 
 // set up CORS header middleware
 app.use((req, res, next) => {
@@ -52,7 +56,7 @@ connectToDB().then(() => {
   );
 });
 
-app.get("/lessons", async (req, res, next) => {
+app.get("/lesson", async (req, res, next) => {
   try {
     const term = req.query.search || "";
     const query = term
@@ -65,7 +69,7 @@ app.get("/lessons", async (req, res, next) => {
       : {};
 
     const database = await getDB();
-    const lessons = database.collection("lessons");
+    const lessons = database.collection("lesson");
     const lessonsData = await lessons.find(query).toArray();
 
     res.send(lessonsData);
@@ -74,11 +78,11 @@ app.get("/lessons", async (req, res, next) => {
   }
 });
 
-app.post("/orders", async (req, res, next) => {
+app.post("/order", async (req, res, next) => {
   try {
     const orderInfo = req.body;
     const database = await getDB();
-    const ordersCollection = database.collection("orders");
+    const ordersCollection = database.collection("order");
     const newOrder = await ordersCollection.insertOne(orderInfo);
 
     res.send(newOrder);
@@ -87,12 +91,12 @@ app.post("/orders", async (req, res, next) => {
   }
 });
 
-app.put("/lessons/:id", async (req, res) => {
+app.put("/lesson/:id", async (req, res) => {
   const id = req.params.id;
   const spacesToDecrement = req.body.spaces;
 
-  const db = await getDB();
-  const lessonsCollection = db.collection("lessons");
+  const database = await getDB();
+  const lessonsCollection = database.collection("lesson");
   try {
     await lessonsCollection.findOneAndUpdate(
       { _id: ObjectId(id) },
