@@ -1,15 +1,15 @@
 const express = require("express");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const { ObjectId } = require("mongodb");
-const parser = require("body-parser");
 const bodyParser = require("body-parser");
+require('dotenv').config()
 
 const app = express();
 
 let mongoDB;
 
 const uri =
-  "mongodb+srv://Sayma:lkC4hLUH46poTdId@web-coursework-2.vjqikya.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://Sayma:Koley1234@sayma-coursework-2.qwlkszx.mongodb.net/?retryWrites=true&w=majority";
 
 const connectToDB = async function () {
   mongoDB = await MongoClient.connect(uri, {
@@ -20,7 +20,7 @@ const connectToDB = async function () {
 };
 
 const getDB = function () {
-  return mongoDB.db("sayma-coursework");
+  return mongoDB.db("coursework-2");
 };
 
 // body parser
@@ -51,8 +51,8 @@ app.use((req, res, next) => {
 app.use(express.static("public"));
 
 connectToDB().then(() => {
-  app.listen(process.env.PORT || 3000, () =>
-    console.log(`server is listening: ${process.env.PORT || 3000}`)
+  app.listen(process.env.PORT, () =>
+    console.log(`server is listening: ${process.env.PORT}`)
   );
 });
 
